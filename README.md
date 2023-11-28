@@ -115,6 +115,7 @@ DO NOT use a GIT folder checked-out on windows, on the WSL. Ensure you git-clone
 #### Knowhow
 
 - Running your own cluster is not easy, people make a living of this for a reason, this tool is just to make things easier/quicker, not to "take things out-of your hands".
+- You should have an understanding of how talhelper works and what it does.  `https://budimanjojo.github.io/talhelper/latest/guides/`
 - You understand kubectl enough to figure out basic commands
 - You have at least some experience bugtracing errors in a kubernetes stack
 - You have more than intermediate knowhow in networking and understand the difference between Layer 2 (DHCP, ARP) and Layer 3 Networking
