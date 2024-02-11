@@ -395,6 +395,7 @@ apply_talos_config(){
   deploy_approver
   echo "Approving Certs..."
   approve_certs
+  check_health
   echo "Deploying helm charts..."
   deploy_metallb
   deploy_metallb_config
