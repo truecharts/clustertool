@@ -1,7 +1,7 @@
 age.agekey
-talconfig.jso*
-patches/sopssecret.yaml
+talconfig.json
 clusterconfig
+patches/sopssecret.yaml
 deps/*
 deps/cni/charts
 deps/certificate-approver/charts
