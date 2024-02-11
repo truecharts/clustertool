@@ -116,7 +116,7 @@ menu(){
     echo -e "4)  (re)Generate Cluster Config"
     echo -e "5)  Bootstrap/Apply Talos Cluster Config"
     echo -e "6)  Upgrade Talos Cluster Nodes"
-    echo -e "7)  Bootstrap FluxCD Cluster"
+    echo -e "7)  (Experimental) Bootstrap FluxCD Cluster"
     echo -e "r)  Talos Cluster Recovery"
     echo -e "0)  Exit"
     read -rt 120 -p "Please select an option by number: " selection || { echo -e "${red}\nFailed to make a selection in time${reset}" ; exit; }
@@ -225,6 +225,16 @@ echo "(re)generating chart-config"
 rm -f ./cluster/main/flux-system/clustersettings.yaml || true
 cp ./templates/clustersettings.yaml.templ ./cluster/main/flux-config/app/clustersettings.secret.yaml
 sed "s/^/  /" talenv.yaml >> ./cluster/main/flux-config/app/clustersettings.secret.yaml
+
+echo "(re)generating included helm-charts"
+rm -f ./deps/kubeapps/values.yaml || true
+cp ./templates/kubeappsvalues.yaml.templ ./deps/kubeapps/values.yaml
+sed -i "s/KUBEAPPS_IP/${KUBEAPPS_IP}/" ./deps/kubeapps/values.yaml
+
+rm -f ./deps/metallb-config/values.yaml || true
+cp ./templates/metallbconfigvalues.yaml.templ ./deps/metallb-config/values.yaml
+sed -i "s/KUBEAPPS_IP/${METALLB_RANGE}/" ./deps/metallb-config/values.yaml
+
 }
 export -f regen
 
