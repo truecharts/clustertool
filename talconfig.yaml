@@ -2,7 +2,7 @@ clusterName: main
 talosVersion: v1.6.4
 kubernetesVersion: v1.29.1
 endpoint: https://${VIP}:6443
-allowSchedulingOnControlPlanes: false
+allowSchedulingOnControlPlanes: true
 additionalMachineCertSans:
     - ${VIP}
 additionalApiServerCertSans:
@@ -27,7 +27,7 @@ nodes:
         size: <= 100TB
       networkInterfaces:
         # suffix is the adapter mac adres.
-        - interface: enxd83add59cce3
+        - interface: eth0
           addresses:
             - ${MASTER1IP}/24
           routes:
@@ -40,20 +40,24 @@ controlPlane:
         - '@./patches/controlplane.json'
         - '@./patches/sopssecret.yaml'
         - '@./patches/kubePrism.json'
+        # - '@./patches/nvidia.json'
     schematic:
         customization:
+            extraKernelArgs:
+                - net.ifnames=0
             systemExtensions:
                 officialExtensions:
+                    - siderolabs/iscsi-tools
+                    - siderolabs/qemu-guest-agent
                     # Enable where needed
                     # - siderolabs/amd-ucode
                     # - siderolabs/bnx2-bnx2x
-                    - siderolabs/iscsi-tools
-                    - siderolabs/qemu-guest-agent
                     # - siderolabs/drbd
                     # - siderolabs/gasket-driver
                     # - siderolabs/i915-ucode
                     # - siderolabs/intel-ucode
                     # - siderolabs/thunderbolt
+worker:
     patches:
         - '@./patches/worker.json'
         - '@./patches/kubePrism.json'
