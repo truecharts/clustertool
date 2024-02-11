@@ -298,40 +298,23 @@ apply_talos_config(){
   echo "Config Apply finished..."
 
 
-  if [ -f BOOTSTRAPPED ]; then
-    echo "Cluster already bootstrapped, skipping bootstrap..."
+  echo ""
+  echo "-----"
+  echo "Bootstrapping TalosOS Cluster..."
+  echo "-----"
 
-    echo "Applying kubectl..."
-    apply_kubeconfig
-  else
-    echo ""
-    echo "-----"
-    echo "Bootstrapping TalosOS Cluster..."
-    echo "-----"
+  talhelper gencommand bootstrap || (echo "Bootstrap Failed or not needed retrying..." && sleep 5 && talhelper gencommand bootstrap )
+  check_health
+  apply_kubeconfig
 
-    if [ -f PREBOOTSTRAP ]; then
-      echo "Node has previously passed initial bootstrapping, trying to continue..."
-      check_health
-    else
-      echo "Node online, bootstrapping..."
-      # It will take a few minutes for the nodes to spin up with the configuration.  Once ready, execute
-      talhelper gencommand bootstrap | bash || ( echo "Bootstrap Failed, retrying bootstrap procedure..." && apply_talos_config )
-
-      export PREBOOTSTRAP=true
-      check_health
-      touch PREBOOTSTRAP
-    fi
-
-    apply_kubeconfig
-
-    echo "Deploying manifests..."
-    deploy_cni
-    deploy_approver
-    approve_certs
-
-    touch BOOTSTRAPPED
-    rm -f PREBOOTSTRAP
-  fi
+  echo "Deploying manifests..."
+  deploy_cni
+  deploy_approver
+  approve_certs
+  deploy_metallb
+  deploy_metallb-config
+  deploy_openebs
+  deploy_kubeapps
 
   echo "Bootstrapping/Expansion finished..."
 
