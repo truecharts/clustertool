@@ -96,13 +96,11 @@ menu(){
     echo -e "${bold}-------------------${reset}"
     echo -e "h)  Help"
     echo -e "1)  Install/Update Dependencies"
-    echo -e "2)  Decrypt Data"
-    echo -e "3)  Encrypt Data"
-    echo -e "4)  (re)Generate Cluster Config"
-    echo -e "5)  Bootstrap/Apply Talos Cluster Config"
-    echo -e "6)  Upgrade Talos Cluster Nodes"
-    echo -e "7)  (Experimental) Bootstrap FluxCD Cluster"
-    echo -e "r)  Talos Cluster Recovery"
+    echo -e "2)  Encryption Options"
+    echo -e "3)  (re)Generate Cluster Config"
+    echo -e "4)  Bootstrap/Apply Talos Cluster Config"
+    echo -e "5)  Upgrade Talos Cluster Nodes"
+    echo -e "6)  Advanced Options"
     echo -e "0)  Exit"
     read -rt 120 -p "Please select an option by number: " selection || { echo -e "${red}\nFailed to make a selection in time${reset}" ; exit; }
 
@@ -117,43 +115,30 @@ menu(){
             install_deps
             ;;
         2)
-            decrypt
+            enc_menu
             exit
             ;;
         3)
-            encrypt
-            exit
-            ;;
-        4)
             parse_yaml_env_all
             regen
             exit
             ;;
-        5)
+        4)
             parse_yaml_env_all
             apply_talos_config
             exit
             ;;
-        6)
+        5)
             parse_yaml_env_all
             upgrade_talos_nodes
             exit
             ;;
-        7)
-            parse_yaml_env_all
-            bootstrap_flux
+        6)
+            adv_menu
             exit
             ;;
         h)
             main_help
-            exit
-            ;;
-        r)
-            recover_talos
-            exit
-            ;;
-        t)
-            apply_talos_config
             exit
             ;;
 
@@ -161,6 +146,91 @@ menu(){
     echo
 }
 export -f menu
+
+adv_menu(){
+    clear -x
+	echo ""
+    echo "ClusterTool: Advanced"
+	echo ""
+    echo -e "${bold}Available Utilities${reset}"
+    echo -e "${bold}-------------------${reset}"
+    echo -e "h)  Help"
+    echo -e "1)  Talos Recovery"
+    echo -e "2)  Manual Talos bootstrap"
+    echo -e "3)  (Experimental) Bootstrap FluxCD Cluster"
+	
+    echo -e "0)  Back"
+    read -rt 120 -p "Please select an option by number: " selection || { echo -e "${red}\nFailed to make a selection in time${reset}" ; menu; }
+
+
+    case $selection in
+        0)
+            menu
+            ;;
+
+        1)
+            parse_yaml_env_all
+            recover_talos
+            exit
+            ;;
+        2)
+            parse_yaml_env_all
+            bootstrap
+            exit
+            ;;
+        3)
+            parse_yaml_env_all
+            bootstrap_flux
+            exit
+            ;;
+        h)
+            adv_help
+            exit
+            ;;
+
+    esac
+    echo
+}
+export -f adv_menu
+
+enc_menu(){
+    clear -x
+	echo ""
+    echo "ClusterTool: Encryption"
+	echo ""
+    echo -e "${bold}Available Utilities${reset}"
+    echo -e "${bold}-------------------${reset}"
+    echo -e "h)  Help"
+    echo -e "1)  Talos Recovery"
+    echo -e "2)  Manual Talos bootstrap"
+    echo -e "3)  (Experimental) Bootstrap FluxCD Cluster"
+	
+    echo -e "0)  Back"
+    read -rt 120 -p "Please select an option by number: " selection || { echo -e "${red}\nFailed to make a selection in time${reset}" ; menu; }
+
+
+    case $selection in
+        0)
+            menu
+            ;;
+
+        1)
+            decrypt
+            exit
+            ;;
+        2)
+            encrypt
+            exit
+            ;;
+        h)
+            enc_help
+            exit
+            ;;
+
+    esac
+    echo
+}
+export -f enc_menu
 
 regen(){
 echo ""
@@ -267,14 +337,19 @@ read -p "Should we bootstrap a new cluster? (yes/no) " yn
 
 case $yn in
     yes ) echo ok, starting bootstrap;
-        bootstrap;;
-    no ) echo ok, we will proceed without bootstrapping;;
-        exit;;
+        bootstrap
+		;;
+    no ) echo ok, we will proceed without bootstrapping
+        exit
+		;;
     y ) echo ok, starting bootstrap;
-        bootstrap;;
-    n ) echo ok, we will proceed without bootstrapping;;
+        bootstrap
+		;;
+    n ) echo ok, we will proceed without bootstrapping
+	;;
     * ) echo invalid response;
-        prompt_bootstrap;;
+        prompt_bootstrap
+		;;
 esac
 }
 export prompt_bootstrap
