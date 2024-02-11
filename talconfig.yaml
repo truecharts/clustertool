@@ -39,7 +39,7 @@ controlPlane:
     patches:
         - '@./patches/controlplane.json'
         - '@./patches/sopssecret.yaml'
-        - '@./patches/kubePrism.json'
+        # - '@./patches/kubePrism.json'
         # - '@./patches/nvidia.json'
     schematic:
         customization:
@@ -60,7 +60,7 @@ controlPlane:
 worker:
     patches:
         - '@./patches/worker.json'
-        - '@./patches/kubePrism.json'
+        # - '@./patches/kubePrism.json'
         # - '@./patches/nvidia.json'
     schematic:
         customization:
@@ -76,3 +76,4 @@ worker:
                     # - siderolabs/i915-ucode
                     # - siderolabs/intel-ucode
                     # - siderolabs/thunderbolt
+

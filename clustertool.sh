@@ -287,7 +287,7 @@ apply_talos_config(){
   echo "-----"
   echo "Bootstrapping TalosOS Cluster..."
   echo "-----"
-  
+  ping ${MASTER1IP}
   talhelper gencommand bootstrap | bash || (echo "Bootstrap Failed or not needed retrying..." && sleep 5 && talhelper gencommand bootstrap | bash )
   check_health
   apply_kubeconfig
