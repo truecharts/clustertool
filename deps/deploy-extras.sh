@@ -26,13 +26,13 @@ popd >/dev/null 2>&1
 }
 export deploy_metallb
 
-deploy_metallb-config(){
+deploy_metallb_config(){
 rm -rf ./deps/metallb-config/charts || true
 kustomize build --enable-helm ./deps/metallb-config | kubectl apply -f -
 rm -rf ./deps/metallb-config/charts || true
 popd >/dev/null 2>&1
 }
-export deploy_metallb-config
+export deploy_metallb_config
 
 deploy_openebs(){
 rm -rf ./deps/openebs/charts || true

@@ -310,7 +310,7 @@ apply_talos_config(){
   deploy_approver
   approve_certs
   deploy_metallb
-  deploy_metallb-config
+  deploy_metallb_config
   deploy_openebs
   deploy_kubeapps
 
