@@ -16,24 +16,18 @@ esac
 }
 export prompt_yn_node
 
+
+
 check_health(){
  PREBOOTSTRAP=false
  if [ ! -z "$1" ]; then
    echo "Waiting for node to be online on ip ${1}..."
    sleep 5
    while ! ping -c1 ${1} &>/dev/null; do :; done
-   if [ -f BOOTSTRAPPED ]; then
-     echo "Checking Cluster Health..."
-     talosctl health --talosconfig clusterconfig/talosconfig -n ${VIP} || prompt_yn_node
-   fi
+   while ! talosctl -e "${1}" -n "${1}" get machinestatus >/dev/null ${1} &>/dev/null; do :; done
  else
-   if [ -f BOOTSTRAPPED ]; then
      echo "Checking Cluster Health..."
      talosctl health --talosconfig clusterconfig/talosconfig -n ${VIP} || exit 1
-   elif $PREBOOTSTRAP; then
-     echo "Checking Cluster Health..."
-     talosctl health --talosconfig clusterconfig/talosconfig -n ${VIP} || exit 1
-   fi
  fi
 }
 export check_health
