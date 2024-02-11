@@ -25,7 +25,7 @@ check_health(){
    sleep 5
    while ! ping -c1 ${1} &>/dev/null; do :; done
    echo "Waiting for node to respond to machine status on ip ${1}..."
-   while ! talosctl -e "${1}" -n "${1}" get machinestatus &>/dev/null; do :; done
+   while ! talosctl -e "${1}" -n "${1}" get machinestatus --talosconfig=./clusterconfig/talosconfig &>/dev/null; do :; done
  else
      echo "Checking Cluster Health..."
      talosctl health --talosconfig clusterconfig/talosconfig -n ${VIP} || exit 1
