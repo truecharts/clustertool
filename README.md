@@ -44,7 +44,32 @@ clustertool -> talhelper -> talosctl -> node/vm
 
 ## Getting Started
 
-### Setting up requirements
+
+## Preparations
+
+### ISO Preparations
+
+We use pre-extended builds of TalosOS with additional drivers.
+For ISO's we advice to use the following:
+
+**Iso for VM installation**
+
+AMD64 ISO: https://factory.talos.dev/image/dc2c29fc8374161b858245a14658779154bf11aa9c23a04813fa8f298fcd0bfc/v1.6.4/metal-amd64.iso
+
+### General Preparations
+
+- Fork the repo here, to your own github account or download and extract
+- Ensure you've cd'ed into this folder.
+- edit `talenv.yaml` and set the settings as you want them
+- Be sure to set `VIP` to a seperate free IP adress from MASTER1, MASTER1 being your nodeIP adresss VIP being used by the system internally.
+- Also make sure to give `METALLB_RANGE`, a free IP range *outside* of your router DHCP range
+- The `KUBEAPPS_IP`, will be used to expose KubeApps, for giving you an easy Apps management GUI
+- Set static DHCP adresses on your router to the IP adresses you defined in `talenv.yaml`
+
+### Client Preparations
+
+"Client" refers to this toolkit
+"VM host" refers to the system hosting the TalosOS Virtual Machine "cluster" itself
 
 #### windows
 
@@ -66,33 +91,26 @@ DO NOT use a GIT folder checked-out on windows, on the WSL. Ensure you git-clone
 - Ensure your local system time is 100% correct
 - Run `sudo ./clustertool.sh` tool to install the other dependencies automatically
 
+### VM-Host Preparations
 
-## Preparations
+#### TrueNAS SCALE VM-Host
 
-- Fork the repo here, to your own github account or download and extract
-- Ensure you've cd'ed into this folder.
-- edit `talenv.yaml` and set the settings as you want them
-- Be sure to set `VIP` to a seperate free IP adress from MASTER1, MASTER1 being your nodeIP adresss VIP being used by the system internally.
-- Also make sure to give `METALLB_RANGE`, a free IP range *outside* of your router DHCP range
-- The `KUBEAPPS_IP`, will be used to expose KubeApps, for giving you an easy Apps management GUI
-- Set static DHCP adresses on your router to the IP adresses you defined in `talenv.yaml`
+- Ensure you add a "bridge" network interface connected to your actual physical interface. (This ensures the host can reach its VM's correctly)
+- Ensure you add your IP and/or DHCP settings to the bridge interface and remove them from the host
+- Create a VM that complies to the minimum and/or recommended system specifications stated above
+- Ensure to use a `virtio` network adapter and a `virtio` disk, for optimal performance
+- Boot the VM with given iso
+- Ensure the VM has the IP adresses defined earlier and the same VM is set in `talenv.yaml`
+- Continue with Bootstrapping
 
-## ISO prep
+#### ProxMox VM-Host
 
-We use pre-extended builds of TalosOS with additional drivers.
-For ISO's we advice to use the following:
-
-**Iso for VM installation**
-
-AMD64 ISO: https://factory.talos.dev/image/dc2c29fc8374161b858245a14658779154bf11aa9c23a04813fa8f298fcd0bfc/v1.6.4/metal-amd64.iso
-
+*to be done*
 
 
 ## Bootstrapping TalosOS on the cluster
 
 - Run `sudo ./clustertool.sh` tool, generate cluster configuration
-- Boot the VM with able iso
-- Ensure the VM has the IP adresses defined earlier and the same VM is set in `talenv.yaml`
 - Run `sudo ./clustertool.sh` tool, Apply and Bootstrap the TalosOS cluster
 - *optional* Run `sudo ./clustertool.sh` tool, Encrypt your configuration files
 - **IMPORTANT**: safe the content of the folder**safe**, this contains the encryption key to your cluster!
