@@ -72,7 +72,10 @@ DO NOT use a GIT folder checked-out on windows, on the WSL. Ensure you git-clone
 - Fork the repo here, to your own github account or download and extract
 - Ensure you've cd'ed into this folder.
 - edit `talenv.yaml` and set the settings as you want them
-- Set static DHCP adresses on your router to the IP adresses you defined in `talconfig.yaml`
+- Be sure to set `VIP` to a seperate free IP adress from MASTER1, MASTER1 being your nodeIP adresss VIP being used by the system internally.
+- Also make sure to give `METALLB_RANGE`, a free IP range *outside* of your router DHCP range
+- The `KUBEAPPS_IP`, will be used to expose KubeApps, for giving you an easy Apps management GUI
+- Set static DHCP adresses on your router to the IP adresses you defined in `talenv.yaml`
 
 ## ISO prep
 
@@ -93,3 +96,4 @@ AMD64 ISO: https://factory.talos.dev/image/dc2c29fc8374161b858245a14658779154bf1
 - Run `sudo ./clustertool.sh` tool, Apply and Bootstrap the TalosOS cluster
 - *optional* Run `sudo ./clustertool.sh` tool, Encrypt your configuration files
 - **IMPORTANT**: safe the content of the folder**safe**, this contains the encryption key to your cluster!
+- After waiting a few minutes, you will now have KubeApps available on http://KUBEAPPS_IP:80 where `KUBEAPPS_IP` is the IP intered above.
