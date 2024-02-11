@@ -1,10 +1,4 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - metallb-config/install.yaml
-  - clusterissuer/install.yaml
-  - traefik/install.yaml
-  - velero/install.yaml
-  - kyverno
-  - blocky/install.yaml
-  - rook-ceph/install.yaml
+  - placeholder.yaml

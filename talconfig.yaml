@@ -4,9 +4,9 @@ kubernetesVersion: v1.29.1
 endpoint: https://${VIP}:6443
 allowSchedulingOnControlPlanes: false
 additionalMachineCertSans:
-    - ENC[AES256_GCM,data:C7w4FGke,iv:1bVF+IZ7/6nKURrofijtlLD6dkJMOXXkBRwkKcXjdtc=,tag:ggs2jUwEJufjJrfFLFB1nA==,type:str]
+    - ENC[AES256_GCM,data:7PhSkVYw,iv:LcUKtQykVGuQAsepfrlx1uNkqSOgkn3n+oqROAmxUWk=,tag:uYQOCsv7+tqM45VkXXGJiw==,type:str]
 additionalApiServerCertSans:
-    - ENC[AES256_GCM,data:JRr8OmDn,iv:6iZwEgH4v7dugokp2Cd9ovFgpALqbExC0ptlKKqZIDs=,tag:ojw31JQwXKg5VPAW9BH59Q==,type:str]
+    - ENC[AES256_GCM,data:5jtGr9Gh,iv:eego3pjgKp8PC+0+eqVGN6LFxd7JWOOFiD7bhWhLi2Y=,tag:mkbA8KTQToC+s2T2m0SwmQ==,type:str]
 # Warning: Also used in Cilium CNI values!
 clusterPodNets:
     - 172.16.0.0/16
@@ -24,7 +24,7 @@ nodes:
         - 8.8.8.8
         - 1.1.1.1
       installDiskSelector:
-        size: <= 1TB
+        size: <= 100TB
       networkInterfaces:
         # suffix is the adapter mac adres.
         - interface: enxd83add59cce3
@@ -35,82 +35,25 @@ nodes:
               gateway: ${GATEWAY}
           vip:
             ip: ${VIP}
-    - hostname: k8s-control-2
-      ipAddress: ${MASTER2IP}
-      controlPlane: true
-      nameservers:
-        - 8.8.8.8
-        - 1.1.1.1
-      installDiskSelector:
-        size: <= 1TB
-      networkInterfaces:
-        # suffix is the adapter mac adres.
-        - interface: enxd83add598b01
-          addresses:
-            - ${MASTER2IP}/24
-          routes:
-            - network: 0.0.0.0/0
-              gateway: ${GATEWAY}
-          vip:
-            ip: ${VIP}
-    - hostname: k8s-control-3
-      ipAddress: ${MASTER3IP}
-      controlPlane: true
-      nameservers:
-        - 8.8.8.8
-        - 1.1.1.1
-      installDiskSelector:
-        size: <= 1TB
-      networkInterfaces:
-        # suffix is the adapter mac adres.
-        - interface: enxd83add59cc24
-          addresses:
-            - ${MASTER3IP}/24
-          routes:
-            - network: 0.0.0.0/0
-              gateway: ${GATEWAY}
-          vip:
-            ip: ${VIP}
-    - hostname: k8s-worker-vm-1
-      ipAddress: 192.168.10.112
-      nameservers:
-        - 8.8.8.8
-        - 1.1.1.1
-      installDiskSelector:
-        size: <= 400GB
-    - hostname: k8s-worker-vm-2
-      ipAddress: 192.168.10.122
-      nameservers:
-        - 8.8.8.8
-        - 1.1.1.1
-      installDiskSelector:
-        size: <= 400GB
-    - hostname: k8s-worker-vm-3
-      ipAddress: 192.168.10.132
-      nameservers:
-        - 8.8.8.8
-        - 1.1.1.1
-      installDiskSelector:
-        size: <= 400GB
 controlPlane:
     patches:
         - '@./patches/controlplane.json'
         - '@./patches/sopssecret.yaml'
         - '@./patches/kubePrism.json'
-        # schematic:
-        #     customization:
-        #         # Required when not using enx* mac adress above in networkInterfaces
-        #         # extraKernelArgs:
-        #         #    - net.ifnames=0
-        #         systemExtensions:
-        #             officialExtensions:
-        #                 # Enable where needed
-        #                 # - siderolabs/amd-ucode
-        #                 # - siderolabs/bnx2-bnx2x
-        #                 # - siderolabs/i915-ucode
-        #                 # - siderolabs/intel-ucode
-        #                 # - siderolabs/qemu-guest-agent
-worker:
+    schematic:
+        customization:
+            systemExtensions:
+                officialExtensions:
+                    # Enable where needed
+                    # - siderolabs/amd-ucode
+                    # - siderolabs/bnx2-bnx2x
+                    - siderolabs/iscsi-tools
+                    - siderolabs/qemu-guest-agent
+                    # - siderolabs/drbd
+                    # - siderolabs/gasket-driver
+                    # - siderolabs/i915-ucode
+                    # - siderolabs/intel-ucode
+                    # - siderolabs/thunderbolt
     patches:
         - '@./patches/worker.json'
         - '@./patches/kubePrism.json'
@@ -138,14 +81,14 @@ sops:
         - recipient: age1uzy27yg04slm0t4naapemy207fd7uh4lda70dxnh932e5dd8n55skgcdrq
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA5M3Erb0RzeUFnMVFoYWla
-            V1JDSXkvS1NrQ2FUY1QxdXVKYUhjOVNHYmtZCmlsb3VmWklXRlNYZEF6KzV1c0lB
-            d2hua2FkaUR5VTByd0FYRm9LZTAzejgKLS0tIDRyYm1FVnpNaEIzWGxUK0k4c2Ro
-            L2hJOEI1U3ZxNGkxQnFWbzBzN1dBVEEKo3aZwTL1JnxgRsvrKgCuC2ANwmXUgjY8
-            Xi8fbwE/MiO8xuNzOLtLS063z3cwJmBtPcDDVGV87GhiRU29N+bmWw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSbWVNZkIrUFNla2c5bCta
+            QXJueUg3WkhzSUMrUzlhRTlRVkp5RGZ0RVhzClBYV1ZXY0lqdHc2TnZ6VnRsMjNa
+            OGZFaHFtUVk5T2tQOXpoaXNONjFDRzQKLS0tIEVsN3E4QkJHM0JSSWYrN2RTa2hP
+            aFhMSHArdElJaThlTDlub0l0N3hzREUKxqtp7OVUxosPY7jHmzwcZ8y+Tm/6oWTp
+            vOqvblQVBfNGS+1i8CQj68mEIUVlyQL8OCCJUH6usyAhQaTaDjWanA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-12-24T22:55:12Z"
-    mac: ENC[AES256_GCM,data:HZT+Gll9Jv2Tgu5oX7NSeG41KWeGt5OAIkydSznudEberMG4ckLmD2NIbtPMNInoH4EjWnI6ciZBAa8NmOsOlRqviy4FrjvTNou/9Az4wjinFaSLJxIp/UodAJsgd0qgIWFqKAVLe4TdERWuRM0Kykm63vX7ldYdTcIt9h9yDFw=,iv:NIj+5oEcpogx/QzIAiNU9wr5GErOIbVGqohhHw/5/4Q=,tag:xlt/DQkASgdhJRNNF1SVNQ==,type:str]
+    lastmodified: "2024-02-11T12:24:51Z"
+    mac: ENC[AES256_GCM,data:H3QZn5X9+pqa4pZzYPrwAaeahum90yPUIh5mSJMwVkNE3ZdCnfWtdZWP90tt5agzy09p3FlfduHk7WWjoo9JHaY57Nu1lzVVug5x7dfARyBA8rhExXOnZ40TF8omd0KDQgAEjVYsZaXiDGlTmrtNb8YXfXJgInqZOSr6SNa5RMA=,iv:ZGMByxkzt5LVFnueJ+7IIDMcrjr3+xRab97p4TF+NOc=,tag:v0lplq8FhV0SlIAapNprow==,type:str]
     pgp: []
     encrypted_regex: ((?i)(displayname|email|pass|ca|id|bootstraptoken|secretboxencryptionsecret|secrets|secrets|password|cert|secret($|[^N])|key|token|^data$|^stringData))
     version: 3.8.1
