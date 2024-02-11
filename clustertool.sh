@@ -300,11 +300,11 @@ apply_talos_config(){
   echo "-----"
   echo "Bootstrapping TalosOS Cluster..."
   echo "-----"
-
-  talhelper gencommand bootstrap || (echo "Bootstrap Failed or not needed retrying..." && sleep 5 && talhelper gencommand bootstrap )
+  
+  talhelper gencommand bootstrap | bash || (echo "Bootstrap Failed or not needed retrying..." && sleep 5 && talhelper gencommand bootstrap | bash )
   check_health
   apply_kubeconfig
-
+  
   echo "Deploying manifests..."
   deploy_cni
   deploy_approver
