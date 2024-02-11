@@ -17,3 +17,35 @@ rm -rf ./deps/csr-approver/charts || true
 popd >/dev/null 2>&1
 }
 export deploy_approver
+
+deploy_metallb(){
+rm -rf ./deps/metallb/charts || true
+kustomize build --enable-helm ./deps/metallb | kubectl apply -f -
+rm -rf ./deps/metallb/charts || true
+popd >/dev/null 2>&1
+}
+export deploy_metallb
+
+deploy_metallb-config(){
+rm -rf ./deps/metallb-config/charts || true
+kustomize build --enable-helm ./deps/metallb-config | kubectl apply -f -
+rm -rf ./deps/metallb-config/charts || true
+popd >/dev/null 2>&1
+}
+export deploy_metallb-config
+
+deploy_openebs(){
+rm -rf ./deps/openebs/charts || true
+kustomize build --enable-helm ./deps/openebs | kubectl apply -f -
+rm -rf ./deps/openebs/charts || true
+popd >/dev/null 2>&1
+}
+export deploy_openebs
+
+deploy_kubeapps(){
+rm -rf ./deps/kubeapps/charts || true
+kustomize build --enable-helm ./deps/kubeapps | kubectl apply -f -
+rm -rf ./deps/kubeapps/charts || true
+popd >/dev/null 2>&1
+}
+export deploy_kubeapps

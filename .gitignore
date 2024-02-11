@@ -14,3 +14,13 @@ deps/cni/values.yaml
 !deps/cni
 !deps/certificate-approver
 !deps/certificate-approver/kustomization.yaml
+!deps/metallb
+!deps/metallb/kustomization.yaml
+!deps/openebs
+!deps/openebs/kustomization.yaml
+!deps/metallb-config
+!deps/metallb-config/kustomization.yaml
+!deps/metallb-config/values.yaml
+!deps/kubeapps
+!deps/kubeapps/kustomization.yaml
+!deps/kubeapps/values.yaml
