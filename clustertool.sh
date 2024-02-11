@@ -385,6 +385,9 @@ apply_talos_config(){
   echo ""
   echo "Config Apply finished..."
 
+
+  prompt_bootstrap
+  
   check_health
   apply_kubeconfig
   
