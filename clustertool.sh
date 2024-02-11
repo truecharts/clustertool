@@ -340,7 +340,6 @@ case $yn in
         bootstrap
 		;;
     no ) echo ok, we will proceed without bootstrapping
-	    check_health
 		;;
     y ) echo ok, starting bootstrap;
         bootstrap
@@ -361,7 +360,7 @@ bootstrap(){
   echo "-----"
   check_health ${MASTER1IP}
   talhelper gencommand bootstrap | bash || (echo "Bootstrap Failed or not needed retrying..." && sleep 5 && talhelper gencommand bootstrap | bash )
-  check_health ${VIP}
+  
 }
 export -f bootstrap
 
@@ -388,6 +387,7 @@ apply_talos_config(){
 
   prompt_bootstrap
   
+  check_health ${VIP}
   apply_kubeconfig
   
   echo "Deploying manifests..."
