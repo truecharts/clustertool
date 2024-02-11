@@ -83,19 +83,6 @@ function parse_yaml_env_all {
 }
 export parse_yaml_env_all
 
-checktime() {
-here=$(date +%s)
-here=${here%?}
-world=$(curl -s "http://worldtimeapi.org/api/timezone/Europe/Rome" |jq '.unixtime')
-world=${world%?}
-
-# if [ ! "$here" = "$world" ] ; then
-#   echo "ERROR, SYSTEM TIME INCORRECT"
-#   exit 1
-# fi
-}
-export checktime
-
 title(){
   echo ""
 }
@@ -334,6 +321,5 @@ if [[ $EUID -ne 0 ]]; then
     echo "$0 is not running as root. Try using sudo."
     exit 2
 else
-  checktime
   menu
 fi
