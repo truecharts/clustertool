@@ -392,7 +392,7 @@ apply_talos_config(){
   
   echo "Deploying manifests..."
   deploy_cni
-  deploy_approver
+  #deploy_approver
   echo "Approving Certs..."
   approve_certs
   check_health

@@ -39,6 +39,7 @@ controlPlane:
     patches:
         - '@./patches/controlplane.json'
         - '@./patches/sopssecret.yaml'
+        - '@./patches/manifests.yaml'
         # - '@./patches/kubePrism.json'
         # - '@./patches/nvidia.json'
     schematic:
