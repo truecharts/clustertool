@@ -28,5 +28,17 @@ bootstrap(){
   echo "-----"
   check_health ${MASTER1IP} "booting"
   talhelper gencommand bootstrap | bash || (echo "Bootstrap Failed or not needed retrying..." && sleep 5 && talhelper gencommand bootstrap | bash )
+  
+  check_node_health ${VIP}
+  apply_kubeconfig
+  
+  echo "Deploying manifests..."
+  deploy_cni
+  # deploy_approver
+  echo "Approving Certs..."
+  approve_certs
+  check_health
+  apply_manifests
+  echo "Bootstrapping/Expansion finished..."
 }
 export -f bootstrap

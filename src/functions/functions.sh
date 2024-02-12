@@ -14,3 +14,5 @@ source ./src/functions/gen-config.sh
 source ./src/functions/bootstrap.sh
 source ./src/functions/upgrade.sh
 source ./src/functions/apply.sh
+source ./src/functions/apply-manifests.sh
+source ./src/functions/remove-manifests.sh

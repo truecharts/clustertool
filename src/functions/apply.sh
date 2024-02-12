@@ -28,24 +28,10 @@ apply_talos_config(){
 
   if $bootstrap; then
     bootstrap
+  else
+    echo "Applying new TalosConfig Finished"
+	apply_kubeconfig
   fi
   
-  check_node_health ${VIP}
-  apply_kubeconfig
-  
-  echo "Deploying manifests..."
-  deploy_cni
-  # deploy_approver
-  echo "Approving Certs..."
-  approve_certs
-  check_health
-  echo "Deploying helm charts..."
-  deploy_metallb
-  deploy_metallb_config
-  deploy_openebs
-  deploy_kubeapps
-
-  echo "Bootstrapping/Expansion finished..."
-
 }
 export -f apply_talos_config
