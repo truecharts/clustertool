@@ -8,7 +8,8 @@ upgrade_talos_nodes () {
 
   check_health
   echo "updating kubernetes to latest version..."
-   talhelper gencommand upgrade-k8s -n ${MASTER1IP}
+  talhelper gencommand upgrade-k8s -n ${MASTER1IP}
   check_health
+  prompt_yn_manifests
 }
 export upgrade_talos_nodes
