@@ -336,13 +336,13 @@ prompt_bootstrap () {
 read -p "Should we bootstrap a new cluster? (yes/no) " yn
 
 case $yn in
-    yes ) echo ok, starting bootstrap;
-        bootstrap
+    yes ) echo ok, enabling bootstrap;
+        export bootstrap=1
 		;;
     no ) echo ok, we will proceed without bootstrapping
 		;;
-    y ) echo ok, starting bootstrap;
-        bootstrap
+    y ) echo ok, enabling bootstrap;
+        export bootstrap=1
 		;;
     n ) echo ok, we will proceed without bootstrapping
 	;;
@@ -358,9 +358,8 @@ bootstrap(){
   echo "-----"
   echo "Bootstrapping TalosOS Cluster..."
   echo "-----"
-  check_health ${MASTER1IP}
+  check_health ${MASTER1IP} "booting"
   talhelper gencommand bootstrap | bash || (echo "Bootstrap Failed or not needed retrying..." && sleep 5 && talhelper gencommand bootstrap | bash )
-  
 }
 export -f bootstrap
 
@@ -372,6 +371,8 @@ apply_talos_config(){
   echo "Applying TalosOS Cluster config to cluster ..."
   echo "-----"
 
+  prompt_bootstrap
+
   while IFS=';' read -ra CMD <&3; do
     for cmd in "${CMD[@]}"; do
       name=$(echo $cmd | sed "s|talosctl apply-config --talosconfig=./clusterconfig/talosconfig --nodes=||g" | sed -r 's/(\b[0-9]{1,3}\.){3}[0-9]{1,3}\b'// | sed "s| --file=./clusterconfig/||g" | sed "s|main-||g" | sed "s|.yaml||g" | sed "s|--insecure||g")
@@ -379,20 +380,26 @@ apply_talos_config(){
       echo ""
       echo "Applying new Talos Config to ${name}"
       $cmd -i 2>/dev/null || $cmd || echo "Failed to apply config..."
-      check_health ${ip}
+	  if $bootstrap; then
+        check_health ${ip} "booting"
+	  else
+        check_health ${ip}
+	  fi
     done
   done 3< <(talhelper gencommand apply)
   echo ""
   echo "Config Apply finished..."
 
-  prompt_bootstrap
+  if $bootstrap; then
+    bootstrap
+  fi
   
   check_health ${VIP}
   apply_kubeconfig
   
   echo "Deploying manifests..."
   deploy_cni
-  #deploy_approver
+  # deploy_approver
   echo "Approving Certs..."
   approve_certs
   check_health
