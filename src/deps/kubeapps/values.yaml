@@ -1,0 +1,8 @@
+frontend:
+  service:
+    type: LoadBalancer
+    loadBalancerIP: 192.168.10.105
+apprepository:
+  initialRepos:
+    - name: truecharts
+      url: https://charts.truecharts.org
