@@ -47,5 +47,8 @@ rm -rf ./src/deps/kubeapps/charts || true
 kustomize build --enable-helm ./src/deps/kubeapps | kubectl apply -f -
 rm -rf ./src/deps/kubeapps/charts || true
 popd >/dev/null 2>&1
+echo "KubeApps Token can be recieved using: kubectl create token kubeapps-kubeapps"
+echo "Current token:"
+kubectl create token kubeapps-kubeapps
 }
 export deploy_kubeapps
