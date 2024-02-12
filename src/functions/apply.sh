@@ -19,7 +19,7 @@ apply_talos_config(){
 	  if $bootstrap; then
         check_node_health ${ip} "booting"
 	  else
-        check_node_health ${ip} "booting"
+        check_node_health ${ip}
 	  fi
     done
   done 3< <(talhelper gencommand apply)
@@ -30,7 +30,7 @@ apply_talos_config(){
     bootstrap
   else
     echo "Applying new TalosConfig Finished"
-	apply_kubeconfig
+	prompt_yn_manifests
   fi
   
 }

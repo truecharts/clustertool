@@ -22,6 +22,7 @@ export prompt_yn_manifests_remove
 
 remove_manifests(){
   echo "NOT IMPLEMENTED..."
+  apply_kubeconfig
   # deploy_metallb
   # deploy_metallb_config
   # deploy_openebs

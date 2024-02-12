@@ -8,12 +8,14 @@ case $yn in
 	    apply_manifests;
 	    ;;
     no ) echo "not installing...";
-        exit;;
+	    apply_kubeconfig
+        ;;
     y ) echo "ok, we will proceed";
 	    apply_manifests;
 	    ;;
     n ) echo "not installing...";
-        exit;;
+	    apply_kubeconfig
+        ;;
     * ) echo "invalid response";
         prompt_yn_manifests;;
 esac
@@ -22,6 +24,7 @@ export prompt_yn_manifests
 
 apply_manifests(){
   echo "Deploying included helm charts..."
+  apply_kubeconfig
   deploy_cni
   deploy_metallb
   deploy_metallb_config
